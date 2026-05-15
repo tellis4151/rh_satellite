@@ -1,1 +1,1 @@
-# rh_satellite
+# Repository for Red Hat Satellite Installation & Configuration
