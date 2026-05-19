@@ -24,6 +24,9 @@
         password: "{{ rh_password }}"
         state: present
 
+    - name: Enable repo configuration
+      ansible.builtin.command: sudo subscription-manager config --rhsm.manage_repos=1
+
     - name: Enable Satellite Installation Repos
       rhsm_repository:
         name:
