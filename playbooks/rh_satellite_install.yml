@@ -42,9 +42,7 @@
         state: present
 
     - name: Execute Satellite Installer
-      command: satellite-installer --scenario satellite --foreman-initial-admin-password {{ admin_password }} --foreman-initial-organization {{ organization }} --foreman-initial-location {{ location }}
-      args:
-        creates: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
+      command: satellite-installer --scenario satellite --foreman-initial-admin-password {{ admin_password }} --foreman-initial-organization {{ organization }} --foreman-initial-location {{ location }} --foreman-initial-admin-username {{ admin_user }}
 
     - name: Wait for Satellite API to be available
       uri:
