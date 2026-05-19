@@ -39,11 +39,7 @@
         state: present
 
     - name: Execute Satellite Installer
-      command: >
-        satellite-installer --scenario satellite
-        --foreman-initial-admin-password {{ admin_password }}
-        --foreman-initial-organization {{ organization }}
-        --foreman-initial-location {{ location }}
+      command: satellite-installer --scenario satellite --foreman-initial-admin-password {{ admin_password }} --foreman-initial-organization {{ organization }} --foreman-initial-location {{ location }}
       args:
         creates: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
 
@@ -55,7 +51,6 @@
       until: _result.status == 200
       retries: 60
       delay: 10
-
     - name: Enable RHEL 8, 9, and 10 Repository Sets
       redhat.satellite.repository_set:
         server_url: "https://localhost"
