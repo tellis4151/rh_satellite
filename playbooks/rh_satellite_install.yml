@@ -1,0 +1,104 @@
+---
+- name: Install, Configure, and Sync Red Hat Satellite with RHEL 8, 9, and 10 Repos
+  hosts: satellite_server
+  become: yes
+  vars:
+    satellite_version: "6.19"
+    admin_user: "admin"
+    organization: "L3_SOE"
+    location: "LHE_NETWORK"
+    
+    # List of Repositories to Enable and Sync
+    rhel_repos:
+      - { name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS RPMs", ver: "10" }
+      - { name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs", ver: "10" }
+      - { name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs", ver: "9" }
+      - { name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs", ver: "9" }
+      - { name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs", ver: "8" }
+      - { name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs", ver: "8" }
+
+  tasks:
+    - name: Register system to RHN
+      community.general.redhat_subscription:
+        username: "{{ rh_user }}"
+        password: "{{ rh_password }}"
+        state: present
+
+    - name: Enable Satellite Installation Repos
+      rhsm_repository:
+        name:
+          - "rhel-9-for-x86_64-baseos-rpms"
+          - "rhel-9-for-x86_64-appstream-rpms"
+          - "satellite-{{ satellite_version }}-for-rhel-9-x86_64-rpms"
+          - "satellite-maintenance-6-for-rhel-9-x86_64-rpms"
+        state: enabled
+
+    - name: Install Satellite Package
+      dnf:
+        name: satellite
+        state: present
+
+    - name: Execute Satellite Installer
+      command: >
+        satellite-installer --scenario satellite
+        --foreman-initial-admin-password {{ admin_password }}
+        --foreman-initial-organization {{ organization }}
+        --foreman-initial-location {{ location }}
+      args:
+        creates: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
+
+    - name: Wait for Satellite API to be available
+      uri:
+        url: "https://localhost/api/v2/status"
+        validate_certs: no
+      register: _result
+      until: _result.status == 200
+      retries: 60
+      delay: 10
+
+    - name: Enable RHEL 8, 9, and 10 Repository Sets
+      redhat.satellite.repository_set:
+        server_url: "https://localhost"
+        username: "{{ admin_user }}"
+        password: "{{ admin_password }}"
+        validate_certs: no
+        organization: "{{ organization }}"
+        name: "{{ item.name }}"
+        basearch: "x86_64"
+        releasever: "{{ item.ver }}"
+        state: enabled
+      loop: "{{ rhel_repos }}"
+
+    - name: Create Sync Plan for Daily Updates
+      redhat.satellite.sync_plan:
+        server_url: "https://localhost"
+        username: "{{ admin_user }}"
+        password: "{{ admin_password }}"
+        validate_certs: no
+        organization: "{{ organization }}"
+        name: "Daily Sync Plan"
+        interval: "daily"
+        enabled: yes
+        state: present
+
+  #  - name: Trigger Initial Repository Sync (Asynchronous)
+  #    redhat.satellite.repository:
+  #      server_url: "https://localhost"
+  #      username: "{{ admin_user }}"
+  #      password: "{{ admin_password }}"
+  #      validate_certs: no
+  #      organization: "{{ organization }}"
+  #      product: "Red Hat Enterprise Linux for x86_64"
+  #      name: "{{ item.name }}"
+  #      state: sync
+  #    loop: "{{ rhel_repos }}"
+  #    async: 25200 # Allows up to 7 hours for the syncs to register/process
+  #    poll: 0      # Fire and forget; doesn't block the playbook execution
+  #    register: sync_sleeper
+
+    - name: Inform operator of background sync
+      debug:
+        msg: >
+          The sync triggers for RHEL 8, 9, and 10 have been successfully sent. 
+          The data download is now running in the background on the Satellite server.
+          Monitor progress via the Satellite Web UI under 'Content > Sync Status'.
