@@ -9,5 +9,4 @@
         uuid: "{{ uuid }}"
         username: "{{ username }}"
         password: "{{ password }}"
-        quantity: 7
         path: /home/ec2-user/manifest.zip
