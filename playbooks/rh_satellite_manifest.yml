@@ -1,0 +1,14 @@
+---
+- name: Create Satellite Manifest
+  hosts: satellite_servers
+  become: yes
+
+  tasks:
+    - name: Create satellite.example.com Manifest and add 7 sub
+      redhat.satellite.redhat_manifest:
+        name: "rh-sat-demo.test.local"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        pool_id: "{{ pool_id }}"
+        quantity: 7
+        path: "/home/ec2-user/manifest.zip"
