@@ -61,8 +61,10 @@
         validate_certs: no
         organization: "{{ organization }}"
         name: "{{ item.name }}"
-        basearch: "x86_64"
-        releasever: "{{ item.ver }}"
+        product: Red Hat Enterprise Linux Server
+        repositories:
+        - releasever: "{{ item.ver }}"
+          basearch: "x86_64"
         state: enabled
       loop: "{{ rhel_repos }}"
 
@@ -73,9 +75,11 @@
         password: "{{ admin_password }}"
         validate_certs: no
         organization: "{{ organization }}"
-        name: "Daily Sync Plan"
-        interval: "daily"
-        enabled: yes
+        name: "RHEL Weekly Sync Plan"
+        interval: "weekly"
+        enabled: true
+        products:
+          - ' Red Hat Enterprise Linux Server'
         state: present
 
   #  - name: Trigger Initial Repository Sync (Asynchronous)
