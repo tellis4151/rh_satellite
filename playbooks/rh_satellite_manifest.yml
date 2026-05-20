@@ -11,4 +11,4 @@
         password: "{{ password }}"
         pool_id: "{{ pool_id }}"
         quantity: 7
-        path: "/home/ec2-user/manifest.zip"
+        path: /home/ec2-user/manifest.zip
