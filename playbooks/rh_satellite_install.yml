@@ -46,7 +46,7 @@
 
     - name: Wait for Satellite API to be available
       uri:
-        url: "https://localhost/api/v2/status"
+        url: "https://{{ ansible_fqdn }}"
         validate_certs: no
       register: _result
       until: _result.status == 200
@@ -55,7 +55,7 @@
 
     - name: Enable RHEL 8, 9, and 10 Repository Sets
       redhat.satellite.repository_set:
-        server_url: "https://localhost"
+        server_url: "https://{{ ansible_fqdn }}"
         username: "{{ admin_user }}"
         password: "{{ admin_password }}"
         validate_certs: no
@@ -68,7 +68,7 @@
 
     - name: Create Sync Plan for Daily Updates
       redhat.satellite.sync_plan:
-        server_url: "https://localhost"
+        server_url: "https://{{ ansible_fqdn }}"
         username: "{{ admin_user }}"
         password: "{{ admin_password }}"
         validate_certs: no

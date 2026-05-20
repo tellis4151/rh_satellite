@@ -1,0 +1,14 @@
+---
+- name: Install, Configure, and Sync Red Hat Satellite with RHEL 8, 9, and 10 Repos
+  hosts: satellite_servers
+  become: yes
+
+  tasks:
+    - name: Wait for Satellite API to be available
+      uri:
+        url: "https://{{ ansible_fqdn }}"
+        validate_certs: no
+      register: _result
+      until: _result.status == 200
+      retries: 60
+      delay: 10
