@@ -6,7 +6,7 @@
   tasks:
     - name: Create satellite.example.com Manifest and add 7 sub
       redhat.satellite.redhat_manifest:
-        name: "rh-sat-demo.test.local"
+        name: rh-sat-demo.test.local
         username: "{{ username }}"
         password: "{{ password }}"
         pool_id: "{{ pool_id }}"
