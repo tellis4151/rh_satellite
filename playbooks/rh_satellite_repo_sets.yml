@@ -16,6 +16,6 @@
       organization: "{{ organization }}"
       product: "Red Hat Enterprise Linux"
       repositories:
-        - releaseserver: "9"
+        - releasever: "9"
           basearch: "x86_64"
       state: enabled
