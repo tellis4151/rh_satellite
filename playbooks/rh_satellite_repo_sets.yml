@@ -1,7 +1,6 @@
 ---
 - name: Install, Configure, and Sync Red Hat Satellite with RHEL 8, 9, and 10 Repos
   hosts: satellite_servers
-  gather_facts: false
   become: yes
 
   tasks:
