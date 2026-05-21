@@ -1,0 +1,20 @@
+---
+- name: Query available repo sets
+  hosts: satellite_servers
+  become: yes
+  vars:
+    organization: "L3_SOE"
+
+  tasks:
+  - name: Configure repo sets
+    redhat.satellite.repository_set:
+      server_url: "https://{{ ansible_fqdn }}"
+      username: "{{ admin_user }}"
+      password: "{{ admin_password }}"
+      validate_certs: no
+      organization: "{{ organization }}"
+    register: output
+
+  - name: repository output
+    debug:
+      var: output
