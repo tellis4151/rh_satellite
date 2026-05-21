@@ -1,0 +1,18 @@
+---
+- name: Install, Configure, and Sync Red Hat Satellite with RHEL 8, 9, and 10 Repos
+  hosts: satellite_servers
+  gather_facts: false
+  become: yes
+
+  tasks:
+  - name: Configure repo sets
+    redhat.satellite.repository_set:
+      server_url: "https://{{ ansible_fqdn }}"
+      username: "{{ admin_user }}"
+      password: "{{ admin_password }}"
+      validate_certs: no
+      label: "rhel-9-for-x86_64-baseos-rpms"
+      repositories:
+        - releaseserver: "9"
+          basearch: "x86_64"
+      state: enabled
