@@ -6,7 +6,7 @@
   tasks:
      - name: Create satellite.example.com Manifest and add 7 sub
        theforeman.foreman.subscription_manifest:
-         server_url: "{{ ansible_fqdn }}"
+         server_url: "https://{{ ansible_fqdn }}"
          username: "{{ admin_user }}"
          password: "{{ admin_password }}"
          organization: "L3_SOE"
