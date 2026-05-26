@@ -1,21 +1,20 @@
 ---
-- name: Install, Configure, and Sync Red Hat Satellite with RHEL 8, 9, and 10 Repos
+- name: Configure Repo Sets
   hosts: satellite_servers
-  become: yes
+
   vars:
     organization: "L3_SOE"
+    repo_list:
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)"
+        version: 10
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)"
+        version: 10
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+        version: 9
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
+        version: 9 
 
   tasks:
   - name: Configure repo sets
-    theforeman.foreman.repository_set:
-      server_url: "https://{{ ansible_fqdn }}"
-      username: "{{ admin_user }}"
-      password: "{{ admin_password }}"
-      validate_certs: no
-      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
-      organization: "{{ organization }}"
-      product: "Red Hat Enterprise Linux"
-      repositories:
-        - releasever: "9"
-          basearch: "x86_64"
-      state: enabled
+    ansible.builtin.command: hammer -u admin -p "{{ password }}" repository-set enable --name "{{ item.name }}" --organization "L3_SOE" --basearch "x86_64" --releasever "{{ item.version }}"
+    loop: "{{ repo_list }}"
