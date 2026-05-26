@@ -9,11 +9,15 @@
     location: "LHE_NETWORK"
     
     # List of Repositories to Enable and Sync
-    rhel_repos:
-      - { name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)", ver: "10" }
-      - { name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)", ver: "10" }
-      - { name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)", ver: "9" }
-      - { name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)", ver: "9" }
+    repo_list:
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)"
+        version: 10
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)"
+        version: 10
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+        version: 9
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
+        version: 9 
 
   tasks:
     - name: Register system to RHN
@@ -61,20 +65,9 @@
          organization: "{{ organization }}"
          state: present
 
-    - name: Enable RHEL 8, 9, and 10 Repository Sets
-      redhat.satellite.repository_set:
-        server_url: "https://{{ ansible_fqdn }}"
-        username: "{{ admin_user }}"
-        password: "{{ admin_password }}"
-        validate_certs: no
-        organization: "{{ organization }}"
-        name: "{{ item.name }}"
-        product: "Red Hat Enterprise Linux"
-        repositories:
-        - releasever: "{{ item.ver }}"
-          basearch: "x86_64"
-        state: enabled
-      loop: "{{ rhel_repos }}"
+    - name: Configure repo sets
+      ansible.builtin.command: hammer -u admin -p "{{ rh_password }}" repository-set enable --name "{{ item.name }}" --organization "L3_SOE" --basearch "x86_64" --releasever "{{ item.version }}"
+      loop: "{{ repo_list }}"
 
     - name: Create Sync Plan for Weekly Updates
       redhat.satellite.sync_plan:
