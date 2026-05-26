@@ -4,11 +4,12 @@
   become: yes
 
   tasks:
-    - name: Create satellite.example.com Manifest and add 7 sub
-      theforeman.foreman.redhat_manifest:
+     - name: Create satellite.example.com Manifest and add 7 sub
+       theforeman.foreman.redhat_manifest:
         server_url: "{{ ansible_fqdn }}"
         username: "{{ admin_user }}"
         password: "{{ admin_password }}"
+        name: L3_rhsat_manifest
         validate_certs: false  
         organization: "{{ organization }}"
         manifest_path: "{{ manifest_path }}"
