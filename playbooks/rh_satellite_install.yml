@@ -55,6 +55,16 @@
       retries: 60
       delay: 10
 
+    - name: Create satellite.example.com Manifest and add 7 sub
+      theforeman.foreman.subscription_manifest:
+         server_url: "https://{{ ansible_fqdn }}"
+         username: "{{ admin_user }}"
+         password: "{{ admin_password }}"
+         organization: "{{ organization }}"
+         validate_certs: false  
+         manifest_path: "{{ manifest_path }}"
+         state: present
+
     - name: Create Red Hat Enterprise Linux product
       redhat.satellite.product:
          server_url: "https://{{ ansible_fqdn }}"
