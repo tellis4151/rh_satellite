@@ -55,7 +55,7 @@
       retries: 60
       delay: 10
 
-    - name: Create satellite.example.com Manifest and add 7 sub
+    - name: Create satellite.example.com Manifest and add subscription allocations
       theforeman.foreman.subscription_manifest:
          server_url: "https://{{ ansible_fqdn }}"
          username: "{{ admin_user }}"
@@ -70,7 +70,7 @@
          server_url: "https://{{ ansible_fqdn }}"
          username: "{{ admin_user }}"
          password: "{{ admin_password }}"
-         name: "Red Hat Enterprise Linux"
+         name: "Red Hat Enterprise Linux - Custom"
          validate_certs: no
          organization: "{{ organization }}"
          state: present
@@ -87,7 +87,8 @@
         validate_certs: no
         organization: "{{ organization }}"
         products: 
-          - "Red Hat Enterprise Linux"
+          - "Red Hat Enterprise Linux - Custom"
+          - "Red Hat Enterprise Linux for x86_64"
         sync_date: "2026-06-01 00:00:00 UTC"
         name: "RHEL Weekly Sync Plan"
         interval: "weekly"
