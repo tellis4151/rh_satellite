@@ -7,13 +7,14 @@
 
   tasks:
   - name: Configure repo sets
-    redhat.satellite.repository_set_info:
+    theforeman.foreman..repository_set_info:
       server_url: "https://{{ ansible_fqdn }}"
       username: "{{ admin_user }}"
       password: "{{ admin_password }}"
       validate_certs: no
       organization: "{{ organization }}"
       name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+      product: "Red Hat Enterprise Linux"
     register: output
 
   - name: repository output
