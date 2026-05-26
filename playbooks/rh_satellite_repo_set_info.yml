@@ -7,7 +7,7 @@
 
   tasks:
   - name: Configure repo sets
-    theforeman.foreman..repository_set_info:
+    theforeman.foreman.repository_set_info:
       server_url: "https://{{ ansible_fqdn }}"
       username: "{{ admin_user }}"
       password: "{{ admin_password }}"
