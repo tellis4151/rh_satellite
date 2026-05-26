@@ -5,8 +5,11 @@
 
   tasks:
     - name: Create satellite.example.com Manifest and add 7 sub
-      redhat.satellite.redhat_manifest:
-        uuid: "{{ uuid }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
-        path: /home/ec2-user/manifest.zip
+      theforeman.foreman.redhat_manifest:
+        server_url: "{{ ansible_fqdn }}"
+        username: "{{ admin_user }}"
+        password: "{{ admin_password }}"
+        validate_certs: false  
+        organization: "{{ organization }}"
+        manifest_path: "{{ manifest_path }}"
+        state: present
