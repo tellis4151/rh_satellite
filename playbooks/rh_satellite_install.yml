@@ -86,7 +86,9 @@
         password: "{{ admin_password }}"
         validate_certs: no
         organization: "{{ organization }}"
-        product: "Red Hat Enterprise Linux"
+        products: 
+          - "Red Hat Enterprise Linux"
+        sync_date: "2026-06-01 00:00:00 UTC"
         name: "RHEL Weekly Sync Plan"
         interval: "weekly"
         enabled: true
