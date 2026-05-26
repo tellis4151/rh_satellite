@@ -76,7 +76,7 @@
          state: present
 
     - name: Configure repo sets
-      ansible.builtin.command: hammer -u admin -p "{{ rh_password }}" repository-set enable --name "{{ item.name }}" --organization "L3_SOE" --basearch "x86_64" --releasever "{{ item.version }}"
+      ansible.builtin.command: hammer -u admin -p "{{ admin_password }}" repository-set enable --name "{{ item.name }}" --organization "L3_SOE" --basearch "x86_64" --releasever "{{ item.version }}"
       loop: "{{ repo_list }}"
 
     - name: Create Sync Plan for Weekly Updates
