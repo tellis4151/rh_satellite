@@ -7,7 +7,7 @@
 
   tasks:
   - name: Configure repo sets
-    redhat.satellite.repository_set:
+    theforeman.foreman.repository_set:
       server_url: "https://{{ ansible_fqdn }}"
       username: "{{ admin_user }}"
       password: "{{ admin_password }}"
