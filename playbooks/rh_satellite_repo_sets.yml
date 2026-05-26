@@ -12,7 +12,7 @@
       username: "{{ admin_user }}"
       password: "{{ admin_password }}"
       validate_certs: no
-      label: "rhel-9-for-x86_64-baseos-rpms"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
       organization: "{{ organization }}"
       product: "Red Hat Enterprise Linux"
       repositories:
